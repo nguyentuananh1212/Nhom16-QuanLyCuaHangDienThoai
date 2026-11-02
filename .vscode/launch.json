@@ -1,0 +1,13 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Backend - Spring Boot Run",
+      "request": "launch",
+      "mainClass": "com.example.Nhom16_QuanLyCuaHangDienThoai.Nhom16QuanLyCuaHangDienThoaiApplication",
+      "projectName": "Nhom16-QuanLyCuaHangDienThoai",
+      "cwd": "${workspaceFolder}/backend"
+    }
+  ]
+}
