@@ -50,6 +50,15 @@ public class Order {
     @Column(precision = 15, scale = 0)
     private BigDecimal discountAmount;
 
+    @Column(length = 100)
+    private String paymentRef;
+
+    @Column(length = 100)
+    private String zpTransId;
+
+    @Column
+    private LocalDateTime paidAt;
+
     @Builder.Default
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> items = new ArrayList<>();

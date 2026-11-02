@@ -197,6 +197,9 @@ public class OrderService {
     }
 
     private void changeStatus(Order o, OrderStatus target) {
+        if (o.getStatus() == target) {
+            return;
+        }
         if (!o.getStatus().canTransitionTo(target)) {
             throw new AppException(ErrorCode.INVALID_STATUS_TRANSITION,
                     "Không thể chuyển từ " + o.getStatus() + " sang " + target);

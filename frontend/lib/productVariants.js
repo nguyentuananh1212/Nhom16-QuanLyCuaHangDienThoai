@@ -10,86 +10,87 @@ export function getColorImage(productName = "", colorName = "", defaultImage = n
   const p = (productName || "").toLowerCase();
   const c = (colorName || "").toLowerCase();
 
-  // 1. Apple iPhone Pro / Pro Max
+  // 1. Apple iPhone Pro / Pro Max (iPhone 16 Pro, 16 Pro Max, 15 Pro,...)
   if ((p.includes("iphone") || p.includes("apple")) && p.includes("pro")) {
     if (c.includes("sa mạc") || c.includes("desert") || c.includes("vàng") || c.includes("gold")) return "/products/iphone-16-pro-max-desert-titan.png";
     if (c.includes("tự nhiên") || c.includes("natural") || c.includes("gray") || c.includes("xám")) return "/products/iphone-16-pro-max-natural-titan.png";
     if (c.includes("trắng") || c.includes("white") || c.includes("bạc") || c.includes("silver")) return "/products/iphone-16-pro-max-white-titan.png";
     if (c.includes("đen") || c.includes("black") || c.includes("dark")) return "/products/iphone-16-pro-max-black-titan.png";
-    return "/products/iphone-16-pro-max-desert-titan.png";
+    return defaultImage || "/products/iphone-16-pro-max-desert-titan.png";
   }
 
-  // 2. Apple iPhone Standard (iPhone 16, 15, v.v.)
+  // 2. Apple iPhone Standard & Plus (iPhone 16, 16 Plus, 15, v.v.)
   if (p.includes("iphone") || p.includes("apple")) {
     if (c.includes("hồng") || c.includes("pink")) return "/products/iphone-16-pink.png";
     if (c.includes("mòng két") || c.includes("teal") || c.includes("xanh lá") || c.includes("green")) return "/products/iphone-16-teal.png";
     if (c.includes("lưu ly") || c.includes("ultramarine") || c.includes("xanh dương") || c.includes("blue")) return "/products/iphone-16-ultramarine.png";
     if (c.includes("trắng") || c.includes("white")) return "/products/iphone-16-white.png";
     if (c.includes("đen") || c.includes("black")) return "/products/iphone-16-black.png";
-    return "/products/iphone-16.png";
+    return defaultImage || "/products/iphone-16.png";
   }
 
   // 3. Xiaomi 15 Series / Xiaomi Flagship
   if (p.includes("xiaomi") && (p.includes("15") || p.includes("ultra"))) {
-    if (c.includes("trúc") || c.includes("xanh") || c.includes("green")) return "/products/xiaomi-15-ultra-green.jpg";
+    if (c.includes("trúc") || c.includes("xanh lá") || c.includes("green")) return "/products/xiaomi-15-ultra-green.jpg";
     if (c.includes("gốm") || c.includes("trắng") || c.includes("white")) return "/products/xiaomi-15-ultra-white.jpg";
     if (c.includes("bạc") || c.includes("silver") || c.includes("titan")) return "/products/xiaomi-15-ultra-silver.jpg";
     if (c.includes("đen") || c.includes("black")) return "/products/xiaomi-15-ultra-black.jpg";
-    return "/products/xiaomi-15-ultra.jpg";
+    return defaultImage || "/products/xiaomi-15-ultra.jpg";
   }
 
-  // 4. Redmi Note Series
+  // 4. Redmi Note Series (Redmi Note 14 Pro, etc.)
   if (p.includes("note")) {
     if (c.includes("cực quang") || c.includes("xanh dương") || c.includes("blue")) return "/products/redmi-note-14-pro-blue.jpg";
     if (c.includes("khói") || c.includes("tím") || c.includes("purple")) return "/products/redmi-note-14-pro-purple.jpg";
     if (c.includes("bạc hà") || c.includes("xanh lá") || c.includes("green")) return "/products/redmi-note-14-pro-green.jpg";
     if (c.includes("đen") || c.includes("black")) return "/products/redmi-note-14-pro-black.jpg";
-    return "/products/redmi-note-14-pro.jpg";
+    return defaultImage || "/products/redmi-note-14-pro.jpg";
   }
 
   // 5. Redmi 14C & Budget Xiaomi
   if (p.includes("14c") || p.includes("redmi")) {
-    if (c.includes("bạc hà") || c.includes("xanh") || c.includes("green")) return "/products/redmi-14c-green.jpg";
-    if (c.includes("khói") || c.includes("tím") || c.includes("purple")) return "/products/redmi-14c-purple.jpg";
+    if (c.includes("bạc hà") || c.includes("xanh lá") || c.includes("green") || c.includes("sage")) return "/products/redmi-14c-green.jpg";
+    if (c.includes("khói") || c.includes("tím") || c.includes("purple") || c.includes("dương") || c.includes("blue")) return "/products/redmi-14c-purple.jpg";
     if (c.includes("đen") || c.includes("black")) return "/products/redmi-14c-black.jpg";
-    return "/products/redmi-14c.jpg";
+    return defaultImage || "/products/redmi-14c.jpg";
   }
 
-  // 6. Samsung Ultra Flagship (S25 Ultra, S24 Ultra)
-  if ((p.includes("ultra") || p.includes("s25") || p.includes("s24")) && (p.includes("samsung") || p.includes("galaxy") || !p.includes("xiaomi"))) {
-    if (c.includes("amber") || c.includes("vàng") || c.includes("yellow")) return "/products/galaxy-s25-ultra-amber-yellow.jpg";
-    if (c.includes("cobalt") || c.includes("tím") || c.includes("violet")) return "/products/galaxy-s25-ultra-cobalt-violet.jpg";
-    if (c.includes("sky") || c.includes("xanh") || c.includes("blue")) return "/products/galaxy-s25-ultra-sky-blue.jpg";
-    if (c.includes("trắng") || c.includes("white") || c.includes("bạc")) return "/products/galaxy-s25-ultra-classic-white.jpg";
-    if (c.includes("đen") || c.includes("black")) return "/products/galaxy-s25-ultra-classic-black.jpg";
-    return "/products/galaxy-s25-ultra-titan-gray.jpg";
+  // 6. Google Pixel Series
+  if (p.includes("pixel") || p.includes("google")) {
+    if (c.includes("rose") || c.includes("hồng") || c.includes("pink") || c.includes("peony")) return "/products/pixel-9-rose.jpg";
+    if (c.includes("wintergreen") || c.includes("bạc hà") || c.includes("xanh lá") || c.includes("green")) return "/products/pixel-9-wintergreen.jpg";
+    if (c.includes("porcelain") || c.includes("trắng") || c.includes("white")) return "/products/pixel-9-porcelain.jpg";
+    if (c.includes("obsidian") || c.includes("đen") || c.includes("black")) return "/products/pixel-9-obsidian.jpg";
+    return defaultImage || "/products/pixel-9.jpg";
   }
 
-  // 7. Samsung Galaxy A Series & Mid
-  if (p.includes("a5") || p.includes("a3") || p.includes("galaxy") || p.includes("samsung")) {
-    if (c.includes("tím") || c.includes("violet")) return "/products/galaxy-a56-awesome-violet.jpg";
-    if (c.includes("xanh") || c.includes("blue")) return "/products/galaxy-a56-awesome-blue.jpg";
-    if (c.includes("vàng") || c.includes("yellow")) return "/products/galaxy-a56-awesome-yellow.jpg";
-    if (c.includes("đen") || c.includes("black")) return "/products/galaxy-a56-awesome-black.jpg";
-    return "/products/galaxy-a56.jpg";
-  }
-
-  // 8. OPPO Reno Series
+  // 7. OPPO Reno Series
   if (p.includes("reno") || p.includes("oppo")) {
     if (c.includes("hồng") || c.includes("pink")) return "/products/oppo-reno-13f-pink.jpg";
     if (c.includes("tím") || c.includes("purple")) return "/products/oppo-reno-13f-purple.jpg";
     if (c.includes("xanh") || c.includes("blue")) return "/products/oppo-reno-13f-blue.jpg";
     if (c.includes("đen") || c.includes("black")) return "/products/oppo-reno-13f-black.jpg";
-    return "/products/oppo-reno-13f.jpg";
+    return defaultImage || "/products/oppo-reno-13f.jpg";
   }
 
-  // 9. Google Pixel Series
-  if (p.includes("pixel") || p.includes("google")) {
-    if (c.includes("rose") || c.includes("hồng") || c.includes("pink")) return "/products/pixel-9-rose.jpg";
-    if (c.includes("wintergreen") || c.includes("bạc hà") || c.includes("xanh") || c.includes("green")) return "/products/pixel-9-wintergreen.jpg";
-    if (c.includes("porcelain") || c.includes("trắng") || c.includes("white")) return "/products/pixel-9-porcelain.jpg";
-    if (c.includes("obsidian") || c.includes("đen") || c.includes("black")) return "/products/pixel-9-obsidian.jpg";
-    return "/products/pixel-9.jpg";
+  // 8. Samsung Ultra Flagship (S25 Ultra, S24 Ultra)
+  if ((p.includes("ultra") || p.includes("s25") || p.includes("s24")) && !p.includes("xiaomi")) {
+    if (c.includes("amber") || c.includes("vàng") || c.includes("yellow")) return "/products/galaxy-s25-ultra-amber-yellow.jpg";
+    if (c.includes("cobalt") || c.includes("tím") || c.includes("violet")) return "/products/galaxy-s25-ultra-cobalt-violet.jpg";
+    if (c.includes("sky") || c.includes("xanh") || c.includes("blue")) return "/products/galaxy-s25-ultra-sky-blue.jpg";
+    if (c.includes("trắng") || c.includes("white") || c.includes("bạc")) return "/products/galaxy-s25-ultra-classic-white.jpg";
+    if (c.includes("đen") || c.includes("black")) return "/products/galaxy-s25-ultra-classic-black.jpg";
+    if (c.includes("titan") || c.includes("xám") || c.includes("gray")) return "/products/galaxy-s25-ultra-titan-gray.jpg";
+    return defaultImage || "/products/galaxy-s25-ultra.jpg";
+  }
+
+  // 9. Samsung Galaxy A Series & Mid
+  if (p.includes("a5") || p.includes("a3") || p.includes("galaxy") || p.includes("samsung")) {
+    if (c.includes("tím") || c.includes("violet")) return "/products/galaxy-a56-awesome-violet.jpg";
+    if (c.includes("xanh") || c.includes("blue")) return "/products/galaxy-a56-awesome-blue.jpg";
+    if (c.includes("vàng") || c.includes("yellow")) return "/products/galaxy-a56-awesome-yellow.jpg";
+    if (c.includes("đen") || c.includes("black")) return "/products/galaxy-a56-awesome-black.jpg";
+    return defaultImage || "/products/galaxy-a56.jpg";
   }
 
   return defaultImage || "/products/galaxy-s25-ultra.jpg";
@@ -114,11 +115,11 @@ const REAL_PHONE_DATA = {
     versions: ["128GB", "256GB", "512GB"],
     priceDiffs: { "128GB": -2000000, "256GB": 0, "512GB": 3500000 },
     colors: [
-      { name: "Xanh Lục Bảo", hex: "#2A4B3A", bg: "#233F31", priceDiff: 450000, stockWeight: 0.14, imageUrl: "/products/galaxy-s25-ultra-sky-blue.jpg" },
-      { name: "Bạc Ánh Trăng", hex: "#D9D9D9", bg: "#CCCCCC", priceDiff: 300000, stockWeight: 0.20, imageUrl: "/products/galaxy-s25-ultra-classic-white.jpg" },
-      { name: "Vàng Cát", hex: "#E2CFA7", bg: "#D5C29A", priceDiff: 150000, stockWeight: 0.18, imageUrl: "/products/galaxy-s25-ultra-amber-yellow.jpg" },
-      { name: "Xanh Navy", hex: "#1F2E45", bg: "#1A273B", priceDiff: 0, stockWeight: 0.26, imageUrl: "/products/galaxy-s25-ultra-titan-gray.jpg" },
-      { name: "Đen Onyx", hex: "#262626", bg: "#1F1F1F", priceDiff: -250000, stockWeight: 0.36, imageUrl: "/products/galaxy-s25-ultra-classic-black.jpg" },
+      { name: "Titan Xám", hex: "#8E8D8A", bg: "#7A7B7E", priceDiff: 0, stockWeight: 0.28, imageUrl: "/products/galaxy-s25-ultra-titan-gray.jpg" },
+      { name: "Vàng Amber", hex: "#D6B464", bg: "#C9A757", priceDiff: 500000, stockWeight: 0.12, imageUrl: "/products/galaxy-s25-ultra-amber-yellow.jpg" },
+      { name: "Xanh Sky Blue", hex: "#7EA9CC", bg: "#709BBF", priceDiff: 200000, stockWeight: 0.20, imageUrl: "/products/galaxy-s25-ultra-sky-blue.jpg" },
+      { name: "Trắng Classic", hex: "#EAEAEA", bg: "#DDDDDD", priceDiff: -150000, stockWeight: 0.24, imageUrl: "/products/galaxy-s25-ultra-classic-white.jpg" },
+      { name: "Đen Classic", hex: "#222224", bg: "#1F2022", priceDiff: -300000, stockWeight: 0.35, imageUrl: "/products/galaxy-s25-ultra-classic-black.jpg" },
     ],
   },
   samsung_mid: {
@@ -176,6 +177,15 @@ const REAL_PHONE_DATA = {
       { name: "Đen Ánh Sao", hex: "#1A1A1A", bg: "#121212", priceDiff: 0, stockWeight: 0.40, imageUrl: "/products/redmi-note-14-pro-black.jpg" },
     ],
   },
+  xiaomi_budget: {
+    versions: ["128GB", "256GB"],
+    priceDiffs: { "128GB": 0, "256GB": 500000 },
+    colors: [
+      { name: "Xanh Bạc Hà", hex: "#7BB6A4", bg: "#6EA795", priceDiff: 0, stockWeight: 0.35, imageUrl: "/products/redmi-14c-green.jpg" },
+      { name: "Tím Khói", hex: "#5B648C", bg: "#4E567B", priceDiff: 100000, stockWeight: 0.30, imageUrl: "/products/redmi-14c-purple.jpg" },
+      { name: "Đen", hex: "#222224", bg: "#1D1D1F", priceDiff: -100000, stockWeight: 0.35, imageUrl: "/products/redmi-14c-black.jpg" },
+    ],
+  },
 
   // --- OPPO ---
   oppo_all: {
@@ -203,6 +213,22 @@ const REAL_PHONE_DATA = {
 };
 
 /**
+ * Chuẩn hoá tên model dòng máy để kiểm tra xem 2 sản phẩm có thực sự cùng model (chỉ khác dung lượng) hay không.
+ * Ví dụ: "iPhone 16 Pro Max 256GB" -> "iphone 16 pro max"
+ *        "iPhone 16 128GB" -> "iphone 16"
+ *        "Samsung Galaxy S25 Ultra 1TB" -> "galaxy s25 ultra"
+ */
+function getCanonicalModel(productName = "", brandName = "") {
+  return (productName || "")
+    .replace(new RegExp(`\\b${brandName}\\b`, "gi"), "")
+    .replace(/\s*\b\d+\s*(?:GB|TB)\b/gi, "")
+    .replace(/\s*\b\d+G\b/gi, "")
+    .replace(/\s+/g, " ")
+    .trim()
+    .toLowerCase();
+}
+
+/**
  * Phân tích và sinh toàn bộ phiên bản và màu sắc thực tế cho bất kỳ sản phẩm nào
  * @param {object} product - Thông tin sản phẩm từ backend
  * @param {Array} relatedProducts - Các sản phẩm cùng hãng trong DB để liên kết chéo
@@ -226,7 +252,13 @@ export function getProductVariants(product, relatedProducts = []) {
       configKey = "samsung_mid";
     }
   } else if (brandLower.includes("xiaomi") || nameLower.includes("redmi")) {
-    configKey = nameLower.includes("ultra") || nameLower.includes("pro") ? "xiaomi_flagship" : "xiaomi_mid";
+    if (nameLower.includes("14c") || nameLower.includes("budget")) {
+      configKey = "xiaomi_budget";
+    } else if (nameLower.includes("ultra") || nameLower.includes("15")) {
+      configKey = "xiaomi_flagship";
+    } else {
+      configKey = "xiaomi_mid";
+    }
   } else if (brandLower.includes("oppo") || nameLower.includes("reno")) {
     configKey = "oppo_all";
   } else if (brandLower.includes("google") || nameLower.includes("pixel")) {
@@ -239,29 +271,45 @@ export function getProductVariants(product, relatedProducts = []) {
 
   // 1. PHIÊN BẢN (Storage / Sibling models)
   const currentStorage = product.storage || (product.name.match(/\d+GB|\d+TB/i) ? product.name.match(/\d+GB|\d+TB/i)[0] : "256GB");
+  const currentCanonical = getCanonicalModel(product.name, product.brandName);
 
-  // Kiểm tra xem trong DB cùng hãng có những sản phẩm nào cùng dòng máy không
+  // Chỉ liên kết các sản phẩm CÙNG HÃNG VÀ CÙNG CHÍNH XÁC MODEL GỐC (ví dụ: cùng là Galaxy S25 Ultra, chỉ khác 256GB vs 1TB)
   const familySiblings = relatedProducts.filter((p) => {
     if (!p || p.id === product.id) return false;
     if (p.brandId !== product.brandId) return false;
-    const baseCurrent = product.name.split(" ")[0] + " " + (product.name.split(" ")[1] || "");
-    return p.name.toLowerCase().includes(baseCurrent.toLowerCase());
+    const pCanonical = getCanonicalModel(p.name, p.brandName);
+    return pCanonical === currentCanonical;
   });
 
   // Tạo danh sách phiên bản chuẩn CellphoneS
   let versions = [];
   if (familySiblings.length > 0) {
+    // Gom nhóm và loại bỏ trùng lặp theo dung lượng (storage)
+    const seenStorage = new Set();
     const allInFamily = [product, ...familySiblings];
-    versions = allInFamily.map((item) => ({
-      id: item.id,
-      label: item.name.replace(item.brandName || "", "").trim(),
-      storage: item.storage,
-      ram: item.ram,
-      price: item.effectivePrice,
-      originalPrice: item.price,
-      isCurrent: item.id === product.id,
-      productId: item.id,
-    }));
+    const uniqueVersions = [];
+    for (const item of allInFamily) {
+      const st = (item.storage || item.name.match(/\d+GB|\d+TB/i)?.[0] || "Default").toUpperCase();
+      if (!seenStorage.has(st)) {
+        seenStorage.add(st);
+        uniqueVersions.push(item);
+      }
+    }
+
+    versions = uniqueVersions.map((item) => {
+      const st = item.storage || item.name.match(/\d+GB|\d+TB/i)?.[0] || "";
+      const ram = item.ram ? `${item.ram} ` : "";
+      return {
+        id: item.id,
+        label: `${ram}${st}`.trim() || item.name,
+        storage: item.storage,
+        ram: item.ram,
+        price: item.effectivePrice,
+        originalPrice: item.price,
+        isCurrent: item.id === product.id,
+        productId: item.id,
+      };
+    });
   } else {
     const availableStorages = preset.versions.includes(currentStorage)
       ? preset.versions
@@ -280,7 +328,7 @@ export function getProductVariants(product, relatedProducts = []) {
       const ramLabel = product.ram ? `${product.ram} ` : "";
       return {
         id: `ver-${st}`,
-        label: `${ramLabel}${st}`,
+        label: `${ramLabel}${st}`.trim(),
         storage: st,
         ram: product.ram,
         price: verPrice,
@@ -295,7 +343,6 @@ export function getProductVariants(product, relatedProducts = []) {
   const defaultColorName = product.color || (product.colors?.[0]?.colorName) || preset.colors[0].name;
   let colors = [];
   if (product.colors && Array.isArray(product.colors) && product.colors.length > 0) {
-    // SỬ DỤNG TRỰC TIẾP DỮ LIỆU TỪ DATABASE
     const baseEffective = Number(product.effectivePrice) || 0;
     const baseOriginal = Number(product.price) || baseEffective;
     colors = product.colors.map((c, index) => {
@@ -303,10 +350,12 @@ export function getProductVariants(product, relatedProducts = []) {
       const cEffective = Number(c.effectivePrice) || Number(c.price) || baseEffective;
       const cOriginal = Number(c.price) || baseOriginal;
       const diff = cEffective - baseEffective;
-      // Ưu tiên ảnh theo màu riêng biệt, nếu DB lưu ảnh chung thì tự động khớp ảnh theo màu
-      const colorImg = (c.imageUrl && c.imageUrl !== product.imageUrl)
-        ? c.imageUrl
-        : getColorImage(product.name, c.colorName, c.imageUrl || product.imageUrl);
+
+      // Ưu tiên c.imageUrl nếu hợp lệ, nếu không khớp với ảnh của sản phẩm thì lấy theo hàm getColorImage
+      let colorImg = c.imageUrl;
+      if (!colorImg || (colorImg.includes("galaxy-s25") && !product.name.toLowerCase().includes("s25"))) {
+        colorImg = getColorImage(product.name, c.colorName, product.imageUrl);
+      }
       return {
         id: `db-col-${c.id || index}`,
         dbId: c.id,
@@ -317,7 +366,7 @@ export function getProductVariants(product, relatedProducts = []) {
         price: cEffective,
         originalPrice: cOriginal,
         stock: c.stock !== undefined ? c.stock : 0,
-        imageUrl: colorImg,
+        imageUrl: colorImg || product.imageUrl,
         isCurrent,
       };
     });

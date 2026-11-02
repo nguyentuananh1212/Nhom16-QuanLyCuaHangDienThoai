@@ -1,13 +1,15 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import { api } from "@/lib/api";
 import { fmtDate, PAY_LABEL, vnd } from "@/lib/format";
 import { useToast } from "@/components/Providers";
 import RequireAuth from "@/components/RequireAuth";
 import { Empty, Loading, StatusTag, useLoad } from "@/components/ui";
 import QrPaymentCard from "@/components/QrPaymentCard";
+import ZaloPayPaymentCard from "@/components/ZaloPayPaymentCard";
 
 export default function OrderDetail() {
   return <RequireAuth><Detail /></RequireAuth>;
@@ -15,8 +17,25 @@ export default function OrderDetail() {
 
 function Detail() {
   const { id } = useParams();
+  const searchParams = useSearchParams();
   const toast = useToast();
   const { data: o, loading, error, reload } = useLoad(() => api("/api/orders/" + id), [id]);
+  const [autoCheckedZalo, setAutoCheckedZalo] = useState(false);
+
+  // Tự động kiểm tra trạng thái ZaloPay nếu người dùng vừa được chuyển hướng về từ cổng thanh toán
+  useEffect(() => {
+    const isFromZaloPay = searchParams.get("payment") === "zalopay" || searchParams.get("from_gateway") === "1";
+    if (isFromZaloPay && o && o.status === "PENDING" && !autoCheckedZalo) {
+      setAutoCheckedZalo(true);
+      api(`/api/payment/zalopay/query/${id}`).then((res) => {
+        if (res.isPaid) {
+          toast("Thanh toán ZaloPay thành công!");
+          reload();
+        }
+      }).catch(() => {});
+    }
+  }, [searchParams, o, id, autoCheckedZalo, reload, toast]);
+
   if (loading && !o) return <Loading />;
   if (error) return <Empty>{error.message}</Empty>;
 
@@ -33,6 +52,7 @@ function Detail() {
         <h1 className="text-2xl font-bold">Đơn #{o.id}</h1><StatusTag status={o.status} />
       </div>
 
+      {/* Thông báo đơn VietQR chờ thanh toán */}
       {o.status === "PENDING" && o.paymentMethod === "BANK_TRANSFER" && (
         <div className="mb-5 rounded-xl border border-amber-200 bg-amber-50/50 p-4 text-xs text-amber-800 flex items-center gap-3 shadow-2xs">
           <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-amber-100 text-base font-bold text-amber-700">⏳</span>
@@ -43,23 +63,25 @@ function Detail() {
         </div>
       )}
 
-      {o.status === "CONFIRMED" && (
-        <div className="mb-5 rounded-xl border border-emerald-200 bg-emerald-50/50 p-4 text-xs text-emerald-800 flex items-center gap-3 shadow-2xs">
-          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-base font-bold text-emerald-700">✓</span>
-          <div>
-            <strong className="block text-sm font-bold text-emerald-900">Đơn hàng đã được hệ thống tự động xác nhận thành công!</strong>
-            <p className="mt-0.5 text-emerald-700">Cửa hàng đang kiểm tra thiết bị, in phiếu bảo hành và tiến hành đóng gói để giao đến bạn sớm nhất.</p>
-          </div>
+      {/* Khối thanh toán ZaloPay */}
+      {o.paymentMethod === "ZALOPAY" && (
+        <div className="mb-6">
+          <ZaloPayPaymentCard
+            order={o}
+            onPaid={reload}
+            initialShowSuccess={searchParams.get("payment") === "zalopay"}
+          />
         </div>
       )}
 
+      {/* Khối thanh toán VietQR */}
       {o.paymentMethod === "BANK_TRANSFER" && (
         <div className="mb-6">
           <QrPaymentCard order={o} onPaid={reload} />
         </div>
       )}
 
-      <div className="grid grid-cols-[1fr_340px] items-start gap-6 max-md:grid-cols-1">
+      <div id="order-details-section" className="grid grid-cols-[1fr_340px] items-start gap-6 max-md:grid-cols-1 scroll-mt-6">
         <div className="panel overflow-x-auto">
           <table className="data-table">
             <thead><tr><th>Sản phẩm</th><th>Đơn giá</th><th>SL</th><th>Thành tiền</th></tr></thead>

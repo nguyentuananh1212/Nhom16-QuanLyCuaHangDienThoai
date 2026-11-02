@@ -76,7 +76,17 @@ export default function AdminOrders() {
                   <td className="tabular-nums">#{o.id}</td><td>{o.userEmail}</td>
                   <td>{o.receiverName}<br /><span className="text-ink-3 tabular-nums">{o.receiverPhone}</span></td>
                   <td className="tabular-nums">{vnd(o.totalAmount)}</td>
-                  <td>{o.paymentMethod === "COD" ? "COD" : "Chuyển khoản (QR)"}</td>
+                  <td>
+                    {o.paymentMethod === "COD" ? (
+                      <span className="font-medium text-ink-2">COD</span>
+                    ) : o.paymentMethod === "ZALOPAY" ? (
+                      <span className="inline-flex items-center gap-1 font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-200 text-xs">
+                        ⚡ ZaloPay
+                      </span>
+                    ) : (
+                      <span className="font-medium text-ink-2">Chuyển khoản (QR)</span>
+                    )}
+                  </td>
                   <td>{fmtDate(o.createdAt)}</td><td><StatusTag status={o.status} /></td>
                   <td><button className="btn btn-sm" onClick={() => setOpenId(o.id)}>Xử lý</button></td>
                 </tr>

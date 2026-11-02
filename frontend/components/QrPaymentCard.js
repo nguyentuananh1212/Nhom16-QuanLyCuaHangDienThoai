@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { api } from "@/lib/api";
 import { vnd } from "@/lib/format";
 import { useToast } from "@/components/Providers";
@@ -48,12 +49,43 @@ export default function QrPaymentCard({ order, onPaid }) {
   // Trạng thái đã thanh toán / đã xác nhận
   if (order.status === "CONFIRMED" || order.status === "SHIPPING" || order.status === "DELIVERED") {
     return (
-      <div className="rounded-xl border border-line bg-surface p-5">
-        <div className="flex items-center gap-3 text-ok">
-          <div className="grid h-10 w-10 place-items-center rounded-full bg-paper text-xl font-bold">✓</div>
-          <div>
-            <h2 className="text-base font-bold text-ink">Đã thanh toán bằng mã QR thành công</h2>
-            <p className="text-xs text-ink-3">Đơn hàng đã được ghi nhận thanh toán và chuyển sang trạng thái Đã xác nhận.</p>
+      <div className="rounded-2xl border-2 border-emerald-400 bg-gradient-to-br from-emerald-50/90 via-white to-teal-50/80 p-6 shadow-sm text-center">
+        <div className="flex flex-col items-center">
+          <div className="relative flex h-16 w-16 items-center justify-center rounded-full bg-emerald-500 text-white text-3xl font-black shadow-md mb-2.5">
+            ✓
+          </div>
+          <span className="rounded-full bg-emerald-100 text-emerald-800 px-3 py-0.5 text-xs font-bold border border-emerald-200 mb-1">
+            Đã thanh toán thành công
+          </span>
+          <h2 className="text-xl font-black text-emerald-950">
+            ĐÃ THANH TOÁN QUA MÃ QR THÀNH CÔNG!
+          </h2>
+          <p className="text-xs text-emerald-800 mt-1 max-w-md">
+            Đơn hàng #{order.id} đã được ghi nhận thanh toán và hệ thống tự động xác nhận thành công.
+          </p>
+
+          {/* 2 nút điều hướng: Tiếp tục mua hàng & Xem chi tiết đơn hàng vừa đặt */}
+          <div className="mt-5 flex flex-wrap items-center justify-center gap-3">
+            <Link
+              href="/products"
+              className="btn bg-[#0068ff] hover:bg-blue-700 text-white font-bold shadow-md px-5 py-2.5 text-sm rounded-xl flex items-center gap-2 cursor-pointer transition-all hover:scale-[1.02]"
+            >
+              <span>🛍️</span>
+              <span>Tiếp tục mua hàng</span>
+            </Link>
+
+            <button
+              type="button"
+              onClick={() => {
+                const el = document.getElementById("order-details-section");
+                if (el) el.scrollIntoView({ behavior: "smooth" });
+                else window.scrollTo({ top: 500, behavior: "smooth" });
+              }}
+              className="btn btn-secondary border-emerald-300 hover:bg-emerald-50 text-emerald-950 font-bold shadow-xs px-5 py-2.5 text-sm rounded-xl flex items-center gap-2 cursor-pointer transition-all hover:scale-[1.02]"
+            >
+              <span>📄</span>
+              <span>Xem chi tiết đơn hàng vừa đặt</span>
+            </button>
           </div>
         </div>
       </div>

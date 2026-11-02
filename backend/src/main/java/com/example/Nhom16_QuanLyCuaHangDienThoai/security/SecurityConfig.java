@@ -1,5 +1,6 @@
 package com.example.Nhom16_QuanLyCuaHangDienThoai.security;
 
+import com.example.Nhom16_QuanLyCuaHangDienThoai.config.ZaloPayProperties;
 import com.example.Nhom16_QuanLyCuaHangDienThoai.repository.UserRepository;
 import com.nimbusds.jose.jwk.source.ImmutableSecret;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -25,7 +26,7 @@ import java.nio.charset.StandardCharsets;
 
 @Configuration
 @EnableMethodSecurity
-@EnableConfigurationProperties(JwtProperties.class)
+@EnableConfigurationProperties({JwtProperties.class, ZaloPayProperties.class})
 public class SecurityConfig {
 
     @Bean
@@ -39,6 +40,8 @@ public class SecurityConfig {
                         .requestMatchers("/error").permitAll()
                         // Xác thực
                         .requestMatchers(HttpMethod.POST, "/api/auth/register", "/api/auth/login").permitAll()
+                        // Callback công khai từ cổng ZaloPay
+                        .requestMatchers(HttpMethod.POST, "/api/payment/zalopay/callback").permitAll()
                         // Dữ liệu công khai cho khách xem
                         .requestMatchers(HttpMethod.GET, "/api/products/**", "/api/brands/**",
                                 "/api/categories/**", "/api/vouchers/**").permitAll()

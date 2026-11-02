@@ -11,7 +11,11 @@ export const NEXT_STATUS = {
   PENDING: ["CONFIRMED", "CANCELLED"], CONFIRMED: ["SHIPPING", "CANCELLED"],
   SHIPPING: ["DELIVERED"], DELIVERED: [], CANCELLED: [],
 };
-export const PAY_LABEL = { COD: "Thanh toán tiền mặt khi nhận hàng (COD)", BANK_TRANSFER: "Chuyển khoản qua mã QR (VietQR ảo)" };
+export const PAY_LABEL = {
+  COD: "Thanh toán tiền mặt khi nhận hàng (COD)",
+  BANK_TRANSFER: "Chuyển khoản qua mã QR (VietQR ảo)",
+  ZALOPAY: "Chuyển khoản / Cổng thanh toán ZaloPay (Sandbox)",
+};
 export const ROLE_LABEL = { ADMIN: "Quản trị", STAFF: "Nhân viên", CUSTOMER: "Khách hàng" };
 
 /** Bỏ khoảng trắng thừa ở mọi trường chuỗi của form */

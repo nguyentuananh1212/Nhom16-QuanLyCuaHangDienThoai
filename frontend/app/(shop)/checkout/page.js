@@ -95,7 +95,11 @@ function Checkout() {
       const o = await api("/api/orders", { method: "POST", body: payload });
       await refreshCart();
       toast("Đặt hàng thành công! Đã gửi thông báo tới " + email);
-      router.push("/orders/" + o.id);
+      if (payload.paymentMethod === "ZALOPAY") {
+        router.push("/orders/" + o.id + "?init_zalopay=1");
+      } else {
+        router.push("/orders/" + o.id);
+      }
     } catch (err) {
       setErrors(err.fields || {});
       toast(err.message, "error");
@@ -125,11 +129,46 @@ function Checkout() {
         <Field label="Địa chỉ" name="shippingAddress" defaultValue={me.address || ""} error={errors.shippingAddress} />
         <Field label="Ghi chú" name="note" as="textarea" rows={2} maxLength={500} />
 
-        {/* Lựa chọn phương thức thanh toán: QR hoặc Tiền mặt (COD) */}
+        {/* Lựa chọn phương thức thanh toán: ZaloPay, QR hoặc Tiền mặt (COD) */}
         <div className="mb-5">
           <label className="label">Phương thức thanh toán</label>
           <div className="space-y-2.5">
-            {/* Tùy chọn 1: Mã QR */}
+            {/* Tùy chọn 1: Cổng ZaloPay Sandbox */}
+            <label
+              className={`flex items-center justify-between rounded-xl border p-3.5 cursor-pointer transition-all ${
+                paymentMethod === "ZALOPAY"
+                  ? "border-[#008fe5] bg-[#008fe5]/10 shadow-xs ring-1 ring-[#008fe5]"
+                  : "border-line bg-surface hover:border-ink-3"
+              }`}
+            >
+              <div className="flex items-center gap-3">
+                <input
+                  type="radio"
+                  name="paymentMethod"
+                  value="ZALOPAY"
+                  checked={paymentMethod === "ZALOPAY"}
+                  onChange={() => setPaymentMethod("ZALOPAY")}
+                  className="accent-[#008fe5]"
+                />
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-tr from-[#0068ff] to-[#00beff] text-white shadow-xs shrink-0 font-bold text-lg">
+                  ⚡
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <strong className="text-ink font-semibold text-sm">Cổng thanh toán ZaloPay (Sandbox)</strong>
+                    <span className="rounded-full bg-blue-100 px-2 py-0.5 text-[10px] font-bold text-blue-700">
+                      Thử nghiệm
+                    </span>
+                  </div>
+                  <p className="text-xs text-ink-3">Quét mã QR ZaloPay, thẻ ATM ngân hàng, tài khoản ZaloPay Sandbox</p>
+                </div>
+              </div>
+              <span className="rounded-full bg-[#008fe5] px-2.5 py-0.5 text-[11px] font-bold text-white shrink-0">
+                ZaloPay
+              </span>
+            </label>
+
+            {/* Tùy chọn 2: Mã QR VietQR */}
             <label
               className={`flex items-center justify-between rounded-xl border p-3.5 cursor-pointer transition-all ${
                 paymentMethod === "BANK_TRANSFER"
@@ -152,12 +191,9 @@ function Checkout() {
                   <p className="text-xs text-ink-3">Quét mã QR bằng ứng dụng ngân hàng hoặc mô phỏng thanh toán sau khi đặt</p>
                 </div>
               </div>
-              <span className="rounded-full bg-accent px-2 py-0.5 text-[11px] font-semibold text-accent-ink shrink-0">
-                Khuyên dùng
-              </span>
             </label>
 
-            {/* Tùy chọn 2: Tiền mặt khi nhận hàng (COD) */}
+            {/* Tùy chọn 3: Tiền mặt khi nhận hàng (COD) */}
             <label
               className={`flex items-center justify-between rounded-xl border p-3.5 cursor-pointer transition-all ${
                 paymentMethod === "COD"

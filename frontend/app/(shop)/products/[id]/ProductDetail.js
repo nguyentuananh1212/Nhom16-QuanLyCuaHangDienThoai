@@ -42,7 +42,7 @@ export default function ProductDetail() {
       const curCol = variantData.colors.find((c) => c.isCurrent) || variantData.colors[0];
       setSelectedColor(curCol || null);
     }
-  }, [id, p?.id]);
+  }, [id, p?.id, relatedData]);
 
   // Đếm lượt xem bằng POST riêng
   useEffect(() => {
@@ -52,18 +52,24 @@ export default function ProductDetail() {
   if (loading) return <Loading />;
   if (error) return <Empty>{error.message}</Empty>;
 
+  // Đảm bảo màu được chọn thuộc về sản phẩm hiện tại, tránh hiển thị ảnh của sản phẩm trước
+  const isColorValid = variantData?.colors?.some((c) => c.id === selectedColor?.id);
+  const activeColor = isColorValid
+    ? selectedColor
+    : (variantData?.colors?.find((c) => c.isCurrent) || variantData?.colors?.[0] || null);
+
   const currentVer = variantData?.versions.find((v) => v.id === selectedVersionId) || variantData?.versions[0];
   const activeProduct = p;
-  const activeImage = selectedColor?.imageUrl || p.imageUrl;
+  const activeImage = activeColor?.imageUrl || p.imageUrl;
 
   // Tính giá và số lượng tồn kho theo từng màu sắc được chọn:
-  const activeColorDiff = selectedColor?.priceDiff || 0;
+  const activeColorDiff = activeColor?.priceDiff || 0;
   const verBasePrice = currentVer ? currentVer.price : p.effectivePrice;
   const verOrigPrice = currentVer ? currentVer.originalPrice : p.price;
 
   const activePrice = Math.max(500000, verBasePrice + activeColorDiff);
   const activeOriginalPrice = Math.max(500000, verOrigPrice + activeColorDiff);
-  const activeStock = selectedColor?.stock !== undefined ? selectedColor.stock : p.stock;
+  const activeStock = activeColor?.stock !== undefined ? activeColor.stock : p.stock;
 
   const activeDiscount =
     activeOriginalPrice > activePrice
@@ -78,14 +84,14 @@ export default function ProductDetail() {
       return false;
     }
     if (activeStock <= 0) {
-      toast(`Màu ${selectedColor?.name || ""} hiện đã hết hàng, vui lòng chọn màu khác!`, "warn");
+      toast(`Màu ${activeColor?.name || ""} hiện đã hết hàng, vui lòng chọn màu khác!`, "warn");
       return false;
     }
     try {
       const targetProductId = currentVer?.productId || p.id;
       await api("/api/cart/items", { method: "POST", body: { productId: targetProductId, quantity: qty } });
       await refreshCart();
-      toast(`Đã thêm ${p.name} - Màu ${selectedColor?.name || p.color} (${qty} chiếc) vào giỏ hàng`, "ok");
+      toast(`Đã thêm ${p.name} - Màu ${activeColor?.name || p.color} (${qty} chiếc) vào giỏ hàng`, "ok");
       return true;
     } catch (e) {
       toast(e.message, "error");
@@ -100,7 +106,7 @@ export default function ProductDetail() {
     ["Bộ nhớ", currentVer?.storage || p.storage],
     ["Camera", p.camera],
     ["Pin", p.battery],
-    ["Màu sắc", selectedColor?.name || p.color],
+    ["Màu sắc", activeColor?.name || p.color],
     ["Hãng", p.brandName],
     ["Phân khúc", p.categoryName],
   ].filter(([, v]) => v);
@@ -121,7 +127,7 @@ export default function ProductDetail() {
       {/* 2. TIÊU ĐỀ VÀ THANH ĐÁNH GIÁ NHANH */}
       <div className="border-b border-line pb-3 mb-6">
         <h1 className="text-2xl md:text-3xl font-bold leading-tight tracking-tight text-ink">
-          {p.name} {selectedColor ? `- ${selectedColor.name}` : ""}
+          {p.name} {activeColor ? `- ${activeColor.name}` : ""}
         </h1>
         <div className="mt-2 flex flex-wrap items-center gap-4 text-xs md:text-sm text-ink-3">
           <span className="flex items-center gap-1 text-amber-500 font-bold">
@@ -150,10 +156,38 @@ export default function ProductDetail() {
               <ProductImage
                 key={activeImage}
                 src={activeImage}
-                alt={`${activeProduct.name} ${selectedColor?.name || ""}`}
+                alt={`${activeProduct.name} ${activeColor?.name || ""}`}
                 className="w-full aspect-square object-contain transition-transform duration-300 hover:scale-105"
               />
             </div>
+
+            {/* Dải thumbnail xem trước theo từng màu sắc */}
+            {variantData?.colors?.length > 1 && (
+              <div className="mt-3 flex items-center justify-center gap-2 overflow-x-auto py-1">
+                {variantData.colors.map((c) => {
+                  const isSelected = activeColor?.id === c.id;
+                  return (
+                    <button
+                      key={c.id}
+                      type="button"
+                      onClick={() => setSelectedColor(c)}
+                      title={`Xem màu: ${c.name}`}
+                      className={`relative h-14 w-14 flex-shrink-0 overflow-hidden rounded-xl border-2 p-1 transition-all ${
+                        isSelected
+                          ? "border-[#D70018] ring-2 ring-red-100 shadow-sm scale-105"
+                          : "border-line bg-paper opacity-70 hover:opacity-100 hover:border-red-200"
+                      }`}
+                    >
+                      <ProductImage
+                        src={c.imageUrl || p.imageUrl}
+                        alt={c.name}
+                        className="h-full w-full object-contain"
+                      />
+                    </button>
+                  );
+                })}
+              </div>
+            )}
 
             {/* Khối cam kết sản phẩm CellphoneS */}
             <div className="mt-5 rounded-xl border border-line bg-surface p-4 text-xs space-y-2.5">
@@ -272,13 +306,13 @@ export default function ProductDetail() {
             <div>
               <div className="mb-2.5 flex items-center justify-between">
                 <span className="text-sm font-bold text-ink">
-                  Màu sắc: <span className="font-semibold text-[#D70018]">{selectedColor?.name || p.color}</span>
+                  Màu sắc: <span className="font-semibold text-[#D70018]">{activeColor?.name || p.color}</span>
                 </span>
                 <span className="text-xs text-ink-3">{variantData.colors.length} màu</span>
               </div>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
                 {variantData.colors.map((c) => {
-                  const isActive = selectedColor?.id === c.id;
+                  const isActive = activeColor?.id === c.id;
                   const colorPrice = Math.max(500000, verBasePrice + (c.priceDiff || 0));
                   const isOut = c.stock <= 0;
                   return (
@@ -342,11 +376,11 @@ export default function ProductDetail() {
             <span className={activeStock > 0 ? "text-ink-2 font-medium" : "font-bold text-price"}>
               {activeStock > 0 ? (
                 <>
-                  Tình trạng: Màu <strong className="text-ink">{selectedColor?.name || p.color}</strong> còn <strong className="text-emerald-600 tabular-nums">{activeStock}</strong> sản phẩm trong kho
+                  Tình trạng: Màu <strong className="text-ink">{activeColor?.name || p.color}</strong> còn <strong className="text-emerald-600 tabular-nums">{activeStock}</strong> sản phẩm trong kho
                 </>
               ) : (
                 <>
-                  Tình trạng: Màu <strong className="text-price">{selectedColor?.name || p.color}</strong> hiện tạm hết hàng
+                  Tình trạng: Màu <strong className="text-price">{activeColor?.name || p.color}</strong> hiện tạm hết hàng
                 </>
               )}
             </span>
@@ -488,7 +522,7 @@ export default function ProductDetail() {
             </div>
             <div className="min-w-0">
               <div className="truncate text-xs font-bold text-ink">
-                {activeProduct.name} - {selectedColor?.name || p.color}
+                {activeProduct.name} - {activeColor?.name || p.color}
               </div>
               <div className="text-sm font-extrabold text-[#D70018] tabular-nums">
                 {vnd(activePrice)}

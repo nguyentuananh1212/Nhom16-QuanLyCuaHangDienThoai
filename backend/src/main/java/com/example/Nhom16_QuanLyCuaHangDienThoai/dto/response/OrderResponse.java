@@ -13,7 +13,8 @@ public record OrderResponse(
         String receiverName, String receiverPhone, String receiverEmail, String shippingAddress, String note,
         OrderStatus status, PaymentMethod paymentMethod, BigDecimal totalAmount,
         String voucherCode, BigDecimal discountAmount,
-        List<OrderItemResponse> items, LocalDateTime createdAt, LocalDateTime updatedAt
+        List<OrderItemResponse> items, LocalDateTime createdAt, LocalDateTime updatedAt,
+        String paymentRef, String zpTransId, LocalDateTime paidAt
 ) {
     public record OrderItemResponse(Long productId, String productName, BigDecimal unitPrice, int quantity,
                                     BigDecimal lineTotal) {}
@@ -39,6 +40,7 @@ public record OrderResponse(
                 o.getReceiverName(), o.getReceiverPhone(), o.getReceiverEmail(), o.getShippingAddress(), o.getNote(),
                 o.getStatus(), o.getPaymentMethod(), o.getTotalAmount(),
                 o.getVoucherCode(), o.getDiscountAmount(),
-                items, o.getCreatedAt(), o.getUpdatedAt());
+                items, o.getCreatedAt(), o.getUpdatedAt(),
+                o.getPaymentRef(), o.getZpTransId(), o.getPaidAt());
     }
 }

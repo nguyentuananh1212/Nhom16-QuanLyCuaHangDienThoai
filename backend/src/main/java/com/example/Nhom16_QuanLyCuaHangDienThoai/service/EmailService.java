@@ -56,7 +56,9 @@ public class EmailService {
 
         String subject = (order.status() == OrderStatus.CONFIRMED)
                 ? "[AURA STORE] Đơn hàng #" + order.id() + " đã được xác nhận thành công"
-                : "[AURA STORE] Đặt hàng #" + order.id() + " thành công - Chờ thanh toán QR";
+                : (order.paymentMethod() == PaymentMethod.ZALOPAY
+                    ? "[AURA STORE] Đặt hàng #" + order.id() + " thành công - Chờ thanh toán ZaloPay"
+                    : "[AURA STORE] Đặt hàng #" + order.id() + " thành công - Chờ thanh toán QR");
         String htmlContent = buildOrderEmailHtml(order);
 
         boolean hasCredentials = mailSender != null && mailUsername != null && !mailUsername.isBlank();
@@ -95,9 +97,11 @@ public class EmailService {
     }
 
     private void logSimulatedEmail(OrderResponse order, String recipient, String subject) {
-        String payLabel = order.paymentMethod() == PaymentMethod.COD
-                ? "Thanh toán khi nhận hàng (COD)"
-                : "Chuyển khoản qua mã QR (VietQR)";
+        String payLabel = switch (order.paymentMethod()) {
+            case COD -> "Thanh toán khi nhận hàng (COD)";
+            case BANK_TRANSFER -> "Chuyển khoản qua mã QR (VietQR)";
+            case ZALOPAY -> "Cổng thanh toán ZaloPay (Sandbox)";
+        };
 
         log.info("""
                 \n============================== [EMAIL THÔNG BÁO ĐƠN HÀNG] ==============================
@@ -120,9 +124,11 @@ public class EmailService {
     }
 
     private String buildOrderEmailHtml(OrderResponse order) {
-        String payLabel = order.paymentMethod() == PaymentMethod.COD
-                ? "Thanh toán khi nhận hàng (COD)"
-                : "Chuyển khoản qua mã QR (VietQR ngân hàng)";
+        String payLabel = switch (order.paymentMethod()) {
+            case COD -> "Thanh toán khi nhận hàng (COD)";
+            case BANK_TRANSFER -> "Chuyển khoản qua mã QR (VietQR ngân hàng)";
+            case ZALOPAY -> "Cổng thanh toán ZaloPay (Sandbox)";
+        };
 
         String dateStr = order.createdAt() != null ? order.createdAt().format(DATE_FORMATTER) : "Hôm nay";
 

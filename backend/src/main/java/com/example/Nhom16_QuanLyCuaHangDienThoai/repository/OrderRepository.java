@@ -32,6 +32,11 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     Optional<Order> findDetailById(Long id);
 
     @EntityGraph(attributePaths = {"user", "items"})
+    Optional<Order> findDetailByPaymentRef(String paymentRef);
+
+    Optional<Order> findByPaymentRef(String paymentRef);
+
+    @EntityGraph(attributePaths = {"user", "items"})
     List<Order> findByStatus(OrderStatus status);
 
     long countByStatus(OrderStatus status);

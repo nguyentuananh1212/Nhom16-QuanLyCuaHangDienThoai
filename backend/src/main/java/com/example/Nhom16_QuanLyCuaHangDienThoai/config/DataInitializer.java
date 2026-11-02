@@ -189,13 +189,13 @@ public class DataInitializer implements ApplicationRunner {
                 ));
 
         // 5. Xiaomi 15 Ultra
-        saveWithColors("Xiaomi 15 Ultra", brands.get("Xiaomi"), flagship, 32990000, null, 17, false,
+        saveWithColors("Xiaomi 15 Ultra", brands.get("Xiaomi"), flagship, 32990000, 29990000, 17, false,
                 "6.73\" AMOLED", "Snapdragon 8 Elite", "16GB", "512GB", "50MP x4 Leica", "5410 mAh", "Bạc Titan", "/products/xiaomi-15-ultra.jpg",
                 List.of(
-                        new ColorSeed("Xanh Rừng Trúc", "#385E4D", 33440000, null, 2, "/products/xiaomi-15-ultra-green.jpg"),
-                        new ColorSeed("Trắng Gốm", "#F5F5F7", 33240000, null, 4, "/products/xiaomi-15-ultra-white.jpg"),
-                        new ColorSeed("Bạc Titan", "#B0B3B8", 32990000, null, 5, "/products/xiaomi-15-ultra-silver.jpg"),
-                        new ColorSeed("Đen Nhám", "#1E1E1E", 32790000, null, 6, "/products/xiaomi-15-ultra-black.jpg")
+                        new ColorSeed("Xanh Rừng Trúc", "#385E4D", 33440000, 30440000, 2, "/products/xiaomi-15-ultra-green.jpg"),
+                        new ColorSeed("Trắng Gốm", "#F5F5F7", 33240000, 30240000, 4, "/products/xiaomi-15-ultra-white.jpg"),
+                        new ColorSeed("Bạc Titan", "#B0B3B8", 32990000, 29990000, 5, "/products/xiaomi-15-ultra-silver.jpg"),
+                        new ColorSeed("Đen Nhám", "#1E1E1E", 32790000, 29790000, 6, "/products/xiaomi-15-ultra-black.jpg")
                 ));
 
         // 6. Redmi Note 14 Pro
@@ -209,13 +209,13 @@ public class DataInitializer implements ApplicationRunner {
                 ));
 
         // 7. OPPO Reno13 F
-        saveWithColors("OPPO Reno13 F", brands.get("OPPO"), mid, 8990000, null, 55, false,
+        saveWithColors("OPPO Reno13 F", brands.get("OPPO"), mid, 8990000, 7990000, 55, false,
                 "6.67\" AMOLED", "Helio G100", "8GB", "256GB", "50MP + 8MP + 2MP", "5800 mAh", "Xanh Bướm Đêm", "/products/oppo-reno-13f.jpg",
                 List.of(
-                        new ColorSeed("Hồng Ánh Kim", "#D48B96", 9290000, null, 8, "/products/oppo-reno-13f-pink.jpg"),
-                        new ColorSeed("Tím Cánh Bướm", "#8B6B9E", 9190000, null, 12, "/products/oppo-reno-13f-purple.jpg"),
-                        new ColorSeed("Xanh Bướm Đêm", "#3E6B89", 8990000, null, 15, "/products/oppo-reno-13f-blue.jpg"),
-                        new ColorSeed("Đen Midnight", "#1C1C1E", 8840000, null, 20, "/products/oppo-reno-13f-black.jpg")
+                        new ColorSeed("Hồng Ánh Kim", "#D48B96", 9290000, 8290000, 8, "/products/oppo-reno-13f-pink.jpg"),
+                        new ColorSeed("Tím Cánh Bướm", "#8B6B9E", 9190000, 8190000, 12, "/products/oppo-reno-13f-purple.jpg"),
+                        new ColorSeed("Xanh Bướm Đêm", "#3E6B89", 8990000, 7990000, 15, "/products/oppo-reno-13f-blue.jpg"),
+                        new ColorSeed("Đen Midnight", "#1C1C1E", 8840000, 7840000, 20, "/products/oppo-reno-13f-black.jpg")
                 ));
 
         // 8. Redmi 14C
