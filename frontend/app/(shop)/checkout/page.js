@@ -94,7 +94,7 @@ function Checkout() {
     try {
       const o = await api("/api/orders", { method: "POST", body: payload });
       await refreshCart();
-      toast("Đặt hàng thành công! Đã gửi thông báo tới " + email);
+      toast("Đang chuyển tới trang thanh toán");
       if (payload.paymentMethod === "ZALOPAY") {
         router.push("/orders/" + o.id + "?init_zalopay=1");
       } else {
